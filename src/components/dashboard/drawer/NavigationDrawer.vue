@@ -155,10 +155,3 @@ const links = ref([
   </v-navigation-drawer>
 </template>
 
-<style>
-.v-list-item--density-comfortable:not(.v-list-item--nav).v-list-item--one-line:not(
-    .v-list-item--active
-  ) {
-  color: #303040 !important;
-}
-</style>

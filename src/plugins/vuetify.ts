@@ -38,8 +38,10 @@ export const useVuetify = (app: any) => {
       },
       VTextField: {
         variant: 'outlined',
-        density: 'comfortable',
+        density: 'compact',
         color: 'blue',
+        hideDetails: true,
+        bgColor: 'white',
       },
       VSelect: {
         variant: 'outlined',
@@ -50,7 +52,7 @@ export const useVuetify = (app: any) => {
         rounded: 'md',
       },
       VDataTable: {
-        showSelect: true,
+        showSelect: false,
         hideDefaultFooter: true,
       },
       VPagination: {
