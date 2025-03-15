@@ -1,42 +1,71 @@
 <script lang="ts" setup>
-import {fetchUsers} from "@/api/mockApi"
-import DataTable from "@/components/app/DataTable.vue"
-import {onMounted,ref} from "vue"
+import { fetchUsers } from "@/api/mockApi";
+import DataTable from "@/components/app/DataTable.vue";
+import UserFilter from "@/components/users/UserFilter.vue";
+import { useAppStore } from "@/stores/app";
+import { useTableOptions } from "@/composables/users/useTableOptions";
+import {  ref, watch } from "vue";
 
-
+const { notify } = useAppStore();
+const {handleEdit,handleRemove} = useTableOptions();
 const headers = [
   {
-    title: 'ID',
-    key: 'id',
+    title: "ID",
+    key: "id",
   },
   {
-    title: 'Name',
-    key: 'name',
+    title: "Name",
+    key: "name",
   },
   {
-    title: 'Email',
-    key: 'email',
+    title: "Email",
+    key: "email",
   },
   {
-    title: 'Role',
-    key: 'role',
+    title: "Role",
+    key: "role",
   },
   {
-    title: '',
-    key:'actions',
-    sortable: false
+    title: "",
+    key: "actions",
+    sortable: false,
   },
+];
 
-]
+const isLoading = ref(false);
+const usersResponse = ref({});
+const filters = ref({
+  page: 1,
+  search: "",
+  filterRole:undefined,
+});
 
-const usersResponse = ref({})
+const handleFilter = async ()=>{
+  isLoading.value = true
+  try {
+     usersResponse.value = await fetchUsers(filters.value);
+  } catch  {
 
-onMounted(async ()=>{
-  // setLoading(true)
-  usersResponse.value = await fetchUsers({})
-  // setLoading(false)
+    notify({
+      type: "error",
+      message: "Failed to fetch users",
+    });
 
-})
+  }finally{
+    isLoading.value = false;
+  }
+
+}
+
+watch(
+  filters, () => {
+    handleFilter()
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 </script>
 
 <template>
@@ -45,10 +74,15 @@ onMounted(async ()=>{
       Users List
     </h2>
     <DataTable
+      v-model:page="filters.page"
       :headers
-      :items="usersResponse.data"
+      :response-data="usersResponse"
+      :is-loading="isLoading"
     >
-      <template #item.actions>
+      <template #top>
+        <UserFilter v-model:filter="filters" />
+      </template>
+      <template #item.actions="{ item }">
         <v-menu>
           <template #activator="{ props }">
             <v-btn
@@ -65,11 +99,13 @@ onMounted(async ()=>{
               prepend-icon="mdi-pencil"
               title="Edit"
               value="edit"
+              @click="handleEdit(item.id)"
             />
             <v-list-item
               prepend-icon="mdi-delete"
               title="Delete"
               value="delete"
+              @click="handleRemove(item.id)"
             />
           </v-list>
         </v-menu>

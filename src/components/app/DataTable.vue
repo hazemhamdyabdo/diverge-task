@@ -1,31 +1,29 @@
 <script lang="ts" setup>
-import {useAppStore } from "@/stores/app"
-import {watchEffect,useSlots,useAttrs } from "vue"
+import { useAppStore } from "@/stores/app";
+import { watchEffect, useSlots, useAttrs } from "vue";
 
 const props = defineProps<{
-  headers: Array<{ title: string; key: string }>
-  items: Array<{ [key: string]: unknown }>
-}>()
+  headers: Array<{ title: string; key: string }>;
+  responseData: any;
+  isLoading: boolean;
+}>();
 
-const page = defineModel('page', { type: Number, default: 1 })
-const {setLoading} = useAppStore()
-const slots = useSlots()
+const page = defineModel("page", { type: Number, default: 1 });
+// const { setLoading } = useAppStore();
+const slots = useSlots();
 
-defineOptions({ inheritAttrs: false }); // Prevent Vue from applying $attrs to root
+defineOptions({ inheritAttrs: false });
 
 const attrs = useAttrs();
 
-watchEffect(() =>{
-setLoading(props.items?.length > 0 ? false : true);
-})
 </script>
 
 <template>
   <section>
-    <slot />
     <v-data-table
       :headers
-      :items
+      :items=" responseData.data"
+      :loading="isLoading"
       v-bind="attrs"
     >
       <template
@@ -58,7 +56,7 @@ setLoading(props.items?.length > 0 ? false : true);
             next-icon=""
             previous-aria-label="previous"
             :total-visible="7"
-            :length="meta?.last_page"
+            :length="responseData?.last_page"
             class="my-4"
           >
             <template #prev />
@@ -68,12 +66,18 @@ setLoading(props.items?.length > 0 ? false : true);
             variant="text"
             class="text-capitalize"
             append-icon="mdi-arrow-right"
-            :disabled="page === meta?.last_page"
+            :disabled="page === responseData?.last_page"
             border
             @click="++page"
           >
             Next
           </v-btn>
+        </div>
+      </template>
+
+      <template #loading>
+        <div class="loading-overlay">
+          <loader />
         </div>
       </template>
     </v-data-table>

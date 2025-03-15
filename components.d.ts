@@ -50,6 +50,7 @@ declare module 'vue' {
     TooltipBtn: typeof import('./src/components/app/TooltipBtn.vue')['default']
     Typing: typeof import('./src/components/app/dashboard/chat/Typing.vue')['default']
     Uploader: typeof import('./src/components/app/Uploader.vue')['default']
+    UserFilter: typeof import('./src/components/users/UserFilter.vue')['default']
     Voice: typeof import('./src/components/app/dashboard/chat/messages/Voice.vue')['default']
     WebsitePerformance: typeof import('./src/components/app/dashboard/widgets/WebsitePerformance.vue')['default']
   }

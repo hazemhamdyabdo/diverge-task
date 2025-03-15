@@ -42,6 +42,7 @@ export const useVuetify = (app: any) => {
         color: 'blue',
         hideDetails: true,
         bgColor: 'white',
+        rounded: 'lg',
       },
       VSelect: {
         variant: 'outlined',

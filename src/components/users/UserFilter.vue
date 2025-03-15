@@ -1,12 +1,25 @@
 <script lang="ts" setup>
-import DatePicker from "./DatePicker.vue";
 const filter = defineModel('filter',{
   type: Object,
   default: () => ({
-    keyword: '',
-    role: [],
+    search: '',
+    filterRole: undefined,
   }),
 })
+
+const roles = [
+  'admin',
+  'editor',
+  'viewer',
+]
+
+const resetFilters = () => {
+  filter.value = {
+    search: '',
+    filterRole: undefined,
+  }
+}
+
 </script>
 
 <template>
@@ -15,7 +28,7 @@ const filter = defineModel('filter',{
     style="font-size: 18px; max-width: 70%"
   >
     <v-text-field
-      v-model="filter.keyword"
+      v-model="filter.search"
       placeholder="Search"
       color="primary"
       name="search"
@@ -23,14 +36,11 @@ const filter = defineModel('filter',{
       prepend-inner-icon="mdi-magnify"
       class="flex-2-0"
     />
-    <v-autocomplete
-      v-model="filter.role"
-      placeholder="Tags"
-      multiple
-      :items="tags"
-      item-title="name"
-      return-object
-      chips
+    <!-- :items="tags" -->
+    <v-select
+      v-model="filter.filterRole"
+      :items="roles"
+      placeholder="Role"
       bg-color="#fff"
       variant="outlined"
       color="primary"
@@ -38,14 +48,11 @@ const filter = defineModel('filter',{
       hide-details
       dense
       menu-icon="mdi-chevron-down"
-      prepend-inner-icon="mdi-tag-outline"
       class="flex-0-1"
       style="min-width: 13%"
-      item-value="id"
     />
 
 
-    <DatePicker v-model="filter.dates" />
 
     <v-btn
       variant="text"
