@@ -1,0 +1,71 @@
+<template>
+  <v-app-bar
+    :style="{ position: 'fixed' }"
+    elevation="0"
+    prominent
+  >
+    <v-app-bar-nav-icon
+      variant="text"
+      color="grey-darken-1"
+      :ripple="false"
+      @click.stop="$emit('rail:switch')"
+    />
+
+    <v-toolbar-title
+      text="Brand"
+      class="text-uppercase text-medium-emphasis"
+    />
+
+    <!-- <v-text-field
+      v-if="lgAndUp"
+      density="compact"
+      placeholder="Search term..."
+      prepend-inner-icon="mdi-magnify"
+      class="rounded-pill mt-5"
+    /> -->
+
+    <v-spacer />
+
+    <template #append>
+      <template v-if="lgAndUp">
+        <v-btn variant="text">
+          Home
+        </v-btn>
+
+        <v-btn variant="text">
+          Blog
+        </v-btn>
+      </template>
+
+      <v-divider
+        class="mx-2 my-auto"
+        style="height: 16px"
+        inset
+        vertical
+      />
+
+      <app-theme-toggle />
+
+      <v-divider
+        class="mx-2 my-auto"
+        style="height: 16px"
+        inset
+        vertical
+      />
+
+
+      <app-bar-language-menu />
+
+      <app-settings-menu />
+    </template>
+  </v-app-bar>
+</template>
+
+<script setup lang="ts">
+import { useDisplay } from 'vuetify'
+import AppSettingsMenu from './SettingsMenu.vue'
+import AppBarLanguageMenu from './LanguageMenu.vue'
+import AppThemeToggle from '@/components/app/ThemeToggle.vue'
+
+const { lgAndUp } = useDisplay()
+</script>

@@ -17,6 +17,7 @@
     "core-js": "^3.37.1",
     "pinia": "^3.0.1",
     "roboto-fontface": "*",
+    "vee-validate": "^4.15.0",
     "vform": "^2.1.2",
     "vue": "^3.4.31",
     "vue-i18n": "10",

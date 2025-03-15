@@ -1,0 +1,103 @@
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+interface LinkItem {
+  title: string;
+  to: string;
+  type?: string;
+  hasLoader?: boolean;
+  fn?: () => void;
+}
+
+const handle = (event: Event, item: LinkItem) => {
+  if (item.fn) {
+    event.preventDefault()
+    item.fn()
+  }
+}
+
+const links = ref([
+  { title: 'Profile', to: '/dashboard/profile' },
+  { title: 'My subscription', to: '/' },
+  { title: 'Posts & Activity', to: '/' },
+  { title: 'Language', to: '/' },
+  { type: 'divider', to: '/' },
+  {
+    title: 'Logout',
+    hasLoader: true,
+    // fn: () => authStore.logout(),
+    to: '/',
+  },
+])
+</script>
+
+
+<template>
+  <v-menu
+    key="language-menu"
+    close-delay="100"
+    location="bottom end"
+    open-delay="60"
+    :close-on-content-click="false"
+    :open-on-hover="false"
+  >
+    <template #activator="{ props }">
+      <v-btn
+        v-bind="props"
+        icon
+      >
+        <v-img
+          aspect-ratio="1/1"
+          cover
+          width="40"
+          class="rounded-pill"
+        >
+          <template #placeholder>
+            <v-skeleton-loader
+              type="avatar"
+              width="40"
+              height="40"
+              class="ma-0"
+            />
+          </template>
+        </v-img>
+      </v-btn>
+    </template>
+
+    <v-list
+      elevation="4"
+      density="compact"
+    >
+      <template
+        v-for="item in links"
+        :key="item.title"
+      >
+        <v-divider
+          v-if="item.type === 'divider'"
+          class="my-2"
+        />
+        <v-list-item
+          v-else
+          :to="item.to"
+          :disabled="item.hasLoader"
+          link
+          @click="handle($event, item)"
+        >
+          <v-list-item-title class="d-flex align-center">
+            {{ item.title }}
+            <v-progress-circular
+              v-if="item.hasLoader"
+              color="dark"
+              bg-color="transparent"
+              indeterminate
+              size="18"
+              width="2"
+              class="ms-2"
+            />
+          </v-list-item-title>
+        </v-list-item>
+      </template>
+    </v-list>
+  </v-menu>
+</template>
